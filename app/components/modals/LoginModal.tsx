@@ -1,24 +1,26 @@
 "use client";
 
+import { signIn } from "next-auth/react";
 import axios from "axios";
 import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import useRegisterModal from "@/app/hooks/useRegisterModal";
+import useLoginModal from "@/app/hooks/useLoginModal";
 import Modal from "./Modal";
 import Heading from "../Heading";
 import Input from "../input/Input";
 import { toast } from "react-hot-toast";
 import Button from "../Button";
-import useLoginModal from "@/app/hooks/useLoginModal";
-import { signIn } from "next-auth/react";
+import useRegisterModal from "@/app/hooks/useRegisterModal";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
-const RegisterModal = (props: Props) => {
-  const registerModal = useRegisterModal();
+const LoginModal = (props: Props) => {
+  const router = useRouter();
   const loginModal = useLoginModal();
+  const registerModal = useRegisterModal();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -27,7 +29,6 @@ const RegisterModal = (props: Props) => {
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
@@ -35,34 +36,29 @@ const RegisterModal = (props: Props) => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
+    signIn("credentials", {
+      ...data,
+      redirect: false,
+    }).then((callback) => {
+      setIsLoading(false);
+      if (callback?.ok) {
+        toast.success("Logged in successfully");
+        router.refresh();
+        loginModal.onClose();
+      }
 
-    axios
-      .post("/api/register", data)
-      .then(() => {
-        registerModal.onClose();
-      })
-      .catch((error) => {
-        toast.error("Somthing went wrong.");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      if (callback?.error) {
+        toast.error(callback.error);
+      }
+    });
   };
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Heading title="Welcome to Airbnb" subtitle="Create an account!" />
+      <Heading title="Welcome back" subtitle="Login to your account!" />
       <Input
         id="email"
         label="Email"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <Input
-        id="name"
-        label="Name"
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -87,7 +83,9 @@ const RegisterModal = (props: Props) => {
         outline
         label="Continue with Google"
         icon={FcGoogle}
-        onClick={() => signIn("google")}
+        onClick={() => {
+          signIn("google");
+        }}
       />
       <Button
         outline
@@ -97,11 +95,11 @@ const RegisterModal = (props: Props) => {
       />
       <div className="text-light mt-4 text-center text-neutral-500">
         <div className="flex flex-row items-center justify-center gap-2">
-          <div>Already have and account?</div>
+          <div>Don't have an account yet?</div>
           <div
             onClick={() => {
-              registerModal.onClose();
-              loginModal.onOpen();
+              loginModal.onClose();
+              registerModal.onOpen();
             }}
             className="
             cursor-pointer
@@ -109,7 +107,7 @@ const RegisterModal = (props: Props) => {
             hover:underline
             "
           >
-            Log in
+            Register
           </div>
         </div>
       </div>
@@ -118,10 +116,10 @@ const RegisterModal = (props: Props) => {
   return (
     <Modal
       disabled={isLoading}
-      isOpen={registerModal.isOpen}
-      title="Register"
+      isOpen={loginModal.isOpen}
+      title="Login"
       actionLabel="Continue"
-      onClose={registerModal.onClose}
+      onClose={loginModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
@@ -129,4 +127,4 @@ const RegisterModal = (props: Props) => {
   );
 };
 
-export default RegisterModal;
+export default LoginModal;

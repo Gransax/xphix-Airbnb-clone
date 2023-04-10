@@ -25,15 +25,15 @@ model User{
   listings Listing[]
   reservations Reservation[]
 }
-
+ 
 model Account{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   userId String @db.ObjectId
   type String
   provider String
   providerAccountId String
-  refresh_token String? @db.ObjectId
-  access_token String? @db.ObjectId
+  refresh_token String? @db.String
+  access_token String? @db.String
   expires_at Int?
   token_type String?
   scope String?
