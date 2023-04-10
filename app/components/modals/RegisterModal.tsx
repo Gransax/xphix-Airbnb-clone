@@ -11,6 +11,7 @@ import Heading from "../Heading";
 import Input from "../input/Input";
 import { toast } from "react-hot-toast";
 import Button from "../Button";
+
 type Props = {};
 
 const RegisterModal = (props: Props) => {
