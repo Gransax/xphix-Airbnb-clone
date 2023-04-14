@@ -104,6 +104,10 @@ const Categories = (props: Props) => {
   const pathName = usePathname();
   const isMainPage = pathName === "/";
 
+  if (!isMainPage) {
+    return null;
+  }
+
   return (
     <Container>
       <div
