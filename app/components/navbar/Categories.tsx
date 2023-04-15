@@ -19,7 +19,15 @@ import { IoDiamond } from "react-icons/io5";
 
 import CategoryBox from "../CategoryBox";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-export const categories = [
+import { IconType } from "react-icons";
+
+export type CategoryType = {
+  label: string;
+  icon: IconType;
+  description: string;
+};
+
+export const categories: Array<CategoryType> = [
   {
     label: "Beach",
     icon: TbBeach,

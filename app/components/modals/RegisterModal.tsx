@@ -40,6 +40,7 @@ const RegisterModal = (props: Props) => {
       .post("/api/register", data)
       .then(() => {
         registerModal.onClose();
+        loginModal.onOpen();
       })
       .catch((error) => {
         toast.error("Somthing went wrong.");
