@@ -20,6 +20,7 @@ const Home = async ({ searchParams }: Props) => {
       </ClientOnly>
     );
   }
+
   return (
     <ClientOnly>
       <Container>
