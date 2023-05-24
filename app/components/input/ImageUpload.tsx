@@ -1,5 +1,4 @@
 "use client";
-
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import { useCallback } from "react";
@@ -9,12 +8,14 @@ declare global {
   var cloudinary: any;
 }
 
-type Props = {
+const uploadPreset = "icpgvd2h";
+
+interface ImageUploadProps {
   onChange: (value: string) => void;
   value: string;
-};
+}
 
-const ImageUpload = ({ onChange, value }: Props) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
   const handleUpload = useCallback(
     (result: any) => {
       onChange(result.info.secure_url);
@@ -25,28 +26,44 @@ const ImageUpload = ({ onChange, value }: Props) => {
   return (
     <CldUploadWidget
       onUpload={handleUpload}
-      uploadPreset="icpgvd2h"
-      options={{ maxFiles: 1 }}
+      uploadPreset={uploadPreset}
+      options={{
+        maxFiles: 1,
+      }}
     >
-      {({ open: any }) => {
+      {({ open }) => {
         return (
           <div
-            onClick={() => {
-              if (open) {
-                open();
-              }
-            }}
-            className="border-neural-300 relative flex cursor-pointer flex-col items-center justify-center gap-4 border-2 border-dashed p-20 text-neutral-600 transition hover:opacity-70"
+            onClick={() => open?.()}
+            className="
+              relative
+              flex
+              cursor-pointer
+              flex-col
+              items-center 
+              justify-center 
+              gap-4 
+              border-2
+              border-dashed
+              border-neutral-300
+              p-20
+              text-neutral-600
+              transition
+              hover:opacity-70
+            "
           >
             <TbPhotoPlus size={50} />
             <div className="text-lg font-semibold">Click to upload</div>
             {value && (
-              <div className="absolute inset-0 h-full w-full">
+              <div
+                className="
+              absolute inset-0 h-full w-full"
+              >
                 <Image
-                  alt="Upload"
                   fill
                   style={{ objectFit: "cover" }}
                   src={value}
+                  alt="House"
                 />
               </div>
             )}

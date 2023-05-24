@@ -3,7 +3,7 @@
 import qs from "query-string";
 import React, { useCallback, useMemo, useState } from "react";
 import Modal from "./Modal";
-import useSeachModal from "@/app/hooks/useSearchModal";
+import useSearchModal from "@/app/hooks/useSearchModal";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Range } from "react-date-range";
 import dynamic from "next/dynamic";
@@ -24,7 +24,7 @@ enum STEPS {
 const SearchModal = (props: Props) => {
   const router = useRouter();
   const params = useSearchParams();
-  const searchModal = useSeachModal();
+  const searchModal = useSearchModal();
 
   const [isLoading, setIsLoading] = useState(false);
   const [location, setLocation] = useState<CountrySelectValue>();
