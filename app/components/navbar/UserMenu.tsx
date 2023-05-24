@@ -38,7 +38,17 @@ const UserMenu = ({ currentUser }: Props) => {
       <div className="flex flex-row items-center gap-3">
         <div
           onClick={onRent}
-          className="hidden cursor-pointer rounded-full px-4 py-3 text-sm font-semibold transition hover:bg-neutral-100 md:block"
+          className="
+            hidden 
+            cursor-pointer 
+            rounded-full 
+            px-4 
+            py-3 
+            text-sm 
+            font-semibold 
+            transition 
+            hover:bg-neutral-100 md:block
+            "
         >
           Airbnb your home
         </div>
